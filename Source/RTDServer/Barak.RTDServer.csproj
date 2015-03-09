@@ -41,14 +41,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DynamicCallback.cs" />
     <Compile Include="HelpDescription.cs" />
     <Compile Include="IPublisher.cs" />
+    <Compile Include="IRtdServer.cs" />
     <Compile Include="ObjectHelper.cs" />
     <Compile Include="Publisher.cs" />
     <Compile Include="PublisherTopic.cs" />
     <Compile Include="PublisherTypeData.cs" />
-    <Compile Include="ServerProxy.cs" />
+    <Compile Include="RTDServerImpl.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

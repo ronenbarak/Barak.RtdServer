@@ -1,0 +1,30 @@
+﻿AssemblyInfo.cs
+	[assembly: ComVisible(true)]
+
+Build both x86 and x64
+	edit In the .csproj
+		Add this to the main <PropertyGroup> location is important place near the end of the <PropertyGroup>
+	
+			<AssemblyName Condition=" '$(Platform)' == 'x86' ">$(AssemblyName)86</AssemblyName>
+			<AssemblyName Condition=" '$(Platform)' == 'x64' ">$(AssemblyName)64</AssemblyName>
+			<OutputPath>bin\$(Configuration)\</OutputPath>
+		Add this to the end the file
+			<Target Name="AfterBuild">
+				<MSBuild Condition=" '$(Platform)' == 'x86' " Projects="$(MSBuildProjectFile)" Properties="Platform=x64;PlatFormTarget=x64;Configuration=$(Configuration)" RunEachTargetSeparately="true" />
+				<!-- We cannot have them both chose one to work with! -->
+			</Target>
+	In the configuration manager replace platfrom to x86
+	Make sure the debug and release configuration are set to build x86 as x86 and x64 as x64 (NOT any cpu)
+
+
+Running install.bat and Uninstall.bat 
+	Make sure you are Administrator
+
+When installing the assembly a warning is shown, this is ok(if you want to sign you application google it)
+	The warning 
+		RegAsm : warning RA0000 : Registering an unsigned assembly with /codebase can cause your assembly to interfere with other applications that may be installed on
+		the same computer. The /codebase switch is intended to be used only with signed assemblies. Please give your assembly a strong name and re-register it.
+
+This project has been tests on excel 2010x64 and 2013x64
+		
+

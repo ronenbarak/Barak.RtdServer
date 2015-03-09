@@ -1,7 +1,7 @@
-using System;
+﻿using System;
 using System.Runtime.InteropServices;
 
-namespace SampleRTDServer
+namespace RTDServer
 {
     [Guid("EC0E6191-DB51-11D3-8F3E-00C04F3651B8")]
     public interface IRtdServer

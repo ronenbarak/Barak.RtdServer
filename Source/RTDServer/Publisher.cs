@@ -10,7 +10,7 @@ namespace RTDServer
 {
   class Publisher : IPublisher
   {
-    private CallbackInvoker m_callbackObject;
+      private IRTDUpdateEvent m_callbackObject;
     private SynchronizationContext m_synchronizationContext;
 
     private object m_lockObject = new object();
@@ -21,7 +21,7 @@ namespace RTDServer
     private HashSet<PropertyTopicData> m_changedObject = new HashSet<PropertyTopicData>();
     private bool m_isPublishedNotify = false;
 
-    public Publisher(CallbackInvoker callbackObject)
+    public Publisher(IRTDUpdateEvent callbackObject)
     {
       m_callbackObject = callbackObject;
       m_synchronizationContext = SynchronizationContext.Current;
@@ -129,33 +129,17 @@ namespace RTDServer
 
     public IPublisherTopic<T> RegisterTopic<T>(string topic, Func<T, object> key) where T : class
     {
-      return RegisterTopic(topic, key, null, null);
-    }
-
-    public IPublisherTopic<T> RegisterTopic<T>(string topic, Func<T, object> key, EntryTransformer<T> transformer) where T : class
-    {
-        return RegisterTopic(topic, key, transformer, null);
+      return RegisterTopic(topic, key, null);
     }
 
     public IPublisherTopic<T> RegisterTopic<T>(string topic, Func<T, object> key, string description) where T : class
     {
-      return RegisterTopic(topic, key, null, null);
-    }
-
-    public IPublisherTopic<T> RegisterTopic<T>(string topic, Func<T, object> key, EntryTransformer<T> transformer, string description) where T : class
-    {
         var properties = new Dictionary<string, PropertyValueExtractor>();
         m_typeToTopic[typeof(T)] = topic.ToUpper();
-        Action<object, object> tranAction = null;
-        if (transformer != null)
-        {
-            tranAction = (o, o1) => transformer.Invoke((T) o, (T) o1);
-        }
 
         m_headTopicToPublisherData[topic.ToUpper()] = new PublisherTypeData(o => key.Invoke((T)o), properties)
         {
             Description = description,
-            TransformMethod = tranAction,
         };
 
         this.Publish(new HelpDescription(this, string.Empty));
@@ -181,10 +165,6 @@ namespace RTDServer
                         pubTypeData.Snapshot.Add(stringkey, instanceAndProperties = new InstanceAndProperties());
                     }
 
-                    if (pubTypeData.TransformMethod != null)
-                    {
-                        pubTypeData.TransformMethod.Invoke(instance, instanceAndProperties.FullInstance);
-                    }
                     instanceAndProperties.FullInstance = instance;
 
                     foreach (PropertyValueExtractor propertyValueExtractor in pubTypeData.Topics.Values)

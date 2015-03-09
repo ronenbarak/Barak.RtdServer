@@ -51,11 +51,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IRtdServer.cs" />
-    <Compile Include="Proxy.cs" />
-    <Compile Include="SampleRtdServer.cs" />
+    <Compile Include="TimeZoneRtdServer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TimeZoneEntry.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Install.bat">
@@ -73,6 +70,9 @@
       <Project>{512F2A45-A242-4E36-9EC4-3EF7B7E4B275}</Project>
       <Name>Barak.RTDServer</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="ProjectConfigurations.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

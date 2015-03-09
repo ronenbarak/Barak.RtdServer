@@ -17,7 +17,6 @@ namespace RTDServer
     public Dictionary<string, PropertyValueExtractor> Topics { get; private set; }
 
     public Dictionary<string, InstanceAndProperties> Snapshot { get; private set; }
-    public Action<object,object> TransformMethod { get; set; }
     public string Description { get; set; }
   }
 

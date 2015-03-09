@@ -11,14 +11,10 @@ namespace RTDServer
     IPublisherTopic<T> SubTopic(Expression<Func<T, object>> property);
   }
 
-  public delegate void EntryTransformer<T>(T newValue, T oldValue);
-
   public interface IPublisher
   {
     IPublisherTopic<T> RegisterTopic<T>(string topic,Func<T, object> key) where T : class;
-    IPublisherTopic<T> RegisterTopic<T>(string topic,Func<T, object> key,EntryTransformer<T> transformer) where T : class;
-    IPublisherTopic<T> RegisterTopic<T>(string topic,Func<T, object> key, string description) where T : class;
-    IPublisherTopic<T> RegisterTopic<T>(string topic,Func<T, object> key, EntryTransformer<T> transformer, string description) where T : class;
+    IPublisherTopic<T> RegisterTopic<T>(string topic,Func<T, object> key,string description) where T : class;
 
     void Publish<T>(T instances) where T : class;
   }

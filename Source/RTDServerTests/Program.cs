@@ -5,43 +5,15 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using RTDServer;
 
 namespace RTDServerTests
 {
-    [Guid("A43788C1-D91B-11D3-8F39-00C04F3651B8")]
-    public interface IRTDUpdateEvent
-    {
-        void UpdateNotify();
-
-        int HeartbeatInterval { get; set; }
-
-        void Disconnect();
-    }
-
-    [Guid("EC0E6191-DB51-11D3-8F3E-00C04F3651B8")]
-    public interface IRtdServer
-    {
-        int ServerStart(IRTDUpdateEvent callback);
-
-        object ConnectData(int topicId,
-                           [MarshalAs(UnmanagedType.SafeArray, SafeArraySubType = VarEnum.VT_VARIANT)] ref Array strings,
-                           ref bool newValues);
-
-        [return: MarshalAs(UnmanagedType.SafeArray, SafeArraySubType = VarEnum.VT_VARIANT)]
-        Array RefreshData(ref int topicCount);
-
-        void DisconnectData(int topicId);
-
-        int Heartbeat();
-
-        void ServerTerminate();
-    }
-
     internal class Callback : IRTDUpdateEvent
     {
-        private dynamic m_rtdServer;
+        private IRtdServer m_rtdServer;
 
-        public Callback(dynamic rtdServer)
+        public Callback(IRtdServer rtdServer)
         {
             m_rtdServer = rtdServer;
             HeartbeatInterval = 5;
@@ -50,7 +22,7 @@ namespace RTDServerTests
         public void UpdateNotify()
         {
             int refCount = 0;
-            object[,] array = m_rtdServer.RefreshData(ref refCount);
+            object[,] array = (object[,])m_rtdServer.RefreshData(ref refCount);
 
             for (int i = 0; i < refCount; i++)
             {
@@ -74,8 +46,7 @@ namespace RTDServerTests
             Type rtd;
             //Object rtdServer = null;
             rtd = Type.GetTypeFromProgID("SampleRtdServer");
-            dynamic rtdServer = Activator.CreateInstance(rtd);
-            Console.WriteLine("rtdServer = {0}", rtdServer.ToString());
+            IRtdServer rtdServer = Activator.CreateInstance(rtd) as IRtdServer;
 
             rtdServer.ServerStart(new Callback(rtdServer));
 
